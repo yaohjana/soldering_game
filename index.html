@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>焊接大師 V3.5 - 職人雙手篇</title>
+    <title>焊接大師 V4 - 職人雙手篇</title>
     <style>
         /* --- 基礎日系 Pop 風格設定 --- */
         :root {
@@ -12,7 +12,7 @@
             --pop-cyan: #00FFFF;
             --pop-black: #222222;
             --pop-white: #FFFFFF;
-            --skin-tone: #FFCC99; /* 皮膚色 */
+            --skin-tone: #FFCC99;
             --bg-pattern: radial-gradient(#222 15%, transparent 16%) 0 0;
         }
 
@@ -75,52 +75,32 @@
             border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; opacity: 0.9;
         }
 
-        /* --- 玩家控制工具與手部 (CSS Art) --- */
-        
-        /* 通用手部樣式 */
+        /* --- 玩家控制工具 --- */
         .hand-part { background: var(--skin-tone); border: 3px solid var(--pop-black); position: absolute; }
 
-        /* 1. 左手與焊錫線 (鍵盤控制) */
+        /* 左手 (鍵盤) */
         #user-solder-wire {
-            position: absolute;
-            width: 300px; height: 7px;
+            position: absolute; width: 300px; height: 7px;
             background: linear-gradient(to bottom, #dcdcdc, #999);
-            z-index: 20;
-            /* 初始位置：左側 */
-            top: 300px; left: -150px; 
-            border-radius: 0 4px 4px 0;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-            /* 旋轉中心在左側，微向下傾斜 */
-            transform-origin: left center;
-            transform: rotate(15deg);
+            z-index: 20; top: 300px; left: -150px; 
+            border-radius: 0 4px 4px 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            transform-origin: left center; transform: rotate(15deg);
             pointer-events: none; transition: all 0.05s ease-out;
         }
-        /* 焊錫尖端碰撞點 (在最右側) */
-        #solder-tip-point {
-            position: absolute; left: 100%; top: 50%;
-            width: 4px; height: 4px; background: red; transform: translate(-50%, -50%); opacity: 0;
-        }
-        /* 左手繪製 (捏住焊錫的動作) */
+        #solder-tip-point { position: absolute; left: 100%; top: 50%; width: 4px; height: 4px; opacity: 0; }
         .left-hand-wrap { position: absolute; left: -20px; top: -35px; z-index: 25; transform: rotate(-5deg); }
         .finger-top { width: 60px; height: 28px; top:0; border-radius: 15px 5px 8px 15px; transform: rotate(8deg); z-index: 2;}
         .finger-bottom { width: 60px; height: 30px; top:22px; border-radius: 15px 8px 8px 15px; transform: rotate(-8deg); }
         .knuckle-base { width: 40px; height: 50px; left: -15px; top: 5px; border-radius: 20px;}
 
-
-        /* 2. 右手與烙鐵 (滑鼠控制) */
+        /* 右手 (滑鼠) */
         #user-iron {
-            position: absolute;
-            width: 22px; height: 180px;
+            position: absolute; width: 22px; height: 180px;
             background: linear-gradient(to right, #555, #888, #555);
-            z-index: 30;
-            top: -200px; left: -200px; pointer-events: none;
-            /* 旋轉中心在筆尖，角度為右上方下來 */
-            transform-origin: bottom center;
-            transform: rotate(35deg);
-            /* 握把部分 */
+            z-index: 30; top: -200px; left: -200px; pointer-events: none;
+            transform-origin: bottom center; transform: rotate(35deg);
             border-top: 70px solid var(--pop-pink);
         }
-        /* 烙鐵尖端 */
         #user-iron::after {
             content: ''; position: absolute; bottom: -30px; left: 0;
             width: 0; height: 0;
@@ -128,25 +108,17 @@
             border-top: 30px solid #B87333; transition: filter 0.2s;
         }
         #user-iron.active::after { border-top-color: #ff5500; filter: drop-shadow(0 0 15px #ff3300); }
-        #iron-tip-point {
-            position: absolute; bottom: -30px; left: 50%;
-            width: 2px; height: 2px; background: blue; transform: translate(-50%, -50%); opacity: 0;
-        }
-        /* 右手繪製 (握住筆桿的動作) */
+        #iron-tip-point { position: absolute; bottom: -30px; left: 50%; width: 2px; height: 2px; opacity: 0; }
         .right-hand-wrap { position: absolute; top: 20px; left: -25px; z-index: 35; transform: rotate(-5deg); }
         .hand-palm { width: 55px; height: 70px; border-radius: 15px 25px 25px 15px; }
         .hand-thumb { width: 30px; height: 55px; top: 25px; left: 35px; border-radius: 20px; transform: rotate(25deg); border-left: none;}
         .finger-wrap { width: 20px; height: 70px; left: 5px; top:0; border-right: 3px solid var(--pop-black); border-radius: 5px;}
 
-
-        /* --- UI 介面 --- */
+        /* --- UI --- */
         .controls-info { display: flex; gap: 20px; margin-top: 10px; font-weight: bold; color: var(--pop-black); }
         .control-box { background: var(--pop-white); border: 3px solid var(--pop-black); padding: 8px 15px; box-shadow: 4px 4px 0px var(--pop-black); display: flex; align-items: center; gap:5px;}
         .key { background: var(--pop-black); color: var(--pop-yellow); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
-        .mouse-icon { display: inline-block; width: 14px; height: 20px; border: 2px solid #000; border-radius: 7px; position: relative; }
-        .mouse-icon::before { content:''; position:absolute; top:3px; left:50%; width:2px; height:5px; background:#000; transform:translateX(-50%); }
-        .mouse-icon.left-click { background: var(--pop-pink); }
-
+        
         .status-panel {
             position: absolute; top: 10px; right: 10px;
             background: var(--pop-white); border: 3px solid var(--pop-black);
@@ -162,24 +134,30 @@
             display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 100;
         }
         #result-overlay h2 { font-size: 3rem; color: var(--pop-yellow); margin: 0; text-shadow: 3px 3px 0 #000;}
+        
+        /* 音效提示 */
+        .sound-hint {
+            position: absolute; bottom: 10px; right: 10px; color: #666; font-size: 0.8rem;
+            background: rgba(255,255,255,0.8); padding: 5px; border-radius: 5px;
+        }
 
     </style>
 </head>
 <body>
 
     <div class="header-badge">
-        <h1>焊接大師 V3.5：職人雙手協作篇</h1>
+        <h1>焊接大師 V4：聲光完全體</h1>
     </div>
 
     <div class="controls-info">
         <div class="control-box" style="background: var(--pop-cyan);">
-             右手(滑鼠)移動烙鐵
+             右手(滑鼠)移動
         </div>
         <div class="control-box" style="background: var(--pop-pink); color:white;">
-            <span class="mouse-icon left-click"></span> 左鍵長按加熱
+            左鍵長按加熱
         </div>
         <div class="control-box" style="background: var(--pop-yellow);">
-             左手(鍵盤) <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> 移動焊錫
+             左手 <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> 移動焊錫
         </div>
     </div>
 
@@ -187,19 +165,21 @@
         <div class="status-panel">
             <div>溫度: <span id="temp-text">25</span>°C</div>
             <div class="bar-box"><div id="temp-bar"></div></div>
-            <div style="margin-top:5px; font-size:0.8rem; color:#666;">需 > 180°C 且接觸</div>
         </div>
 
         <div id="pad"></div>
         <div id="wire-target"></div>
         <div id="solder-blob"></div>
 
+        <!-- 手部控制 -->
         <div id="user-solder-wire">
             <div class="left-hand-wrap">
                 <div class="hand-part knuckle-base"></div>
                 <div class="hand-part finger-bottom"></div>
-                <div class="hand-part finger-top"></div> </div>
-            <div id="solder-tip-point"></div> </div>
+                <div class="hand-part finger-top"></div>
+            </div>
+            <div id="solder-tip-point"></div>
+        </div>
 
         <div id="user-iron">
             <div class="right-hand-wrap">
@@ -208,17 +188,113 @@
                 </div>
                 <div class="hand-part hand-thumb"></div>
             </div>
-            <div id="iron-tip-point"></div> </div>
+            <div id="iron-tip-point"></div>
+        </div>
 
         <div id="result-overlay">
              <h2 id="result-title">完美焊接！</h2>
-             <p id="result-desc" style="font-size: 1.2rem; margin: 10px 0;">描述</p>
-             <button onclick="resetGame()" style="padding: 10px 25px; font-size: 1.3rem; font-weight:900; border:3px solid #000; background:var(--pop-cyan); cursor:pointer; box-shadow: 4px 4px 0 #000;">再試一次</button>
+             <p id="result-desc" style="font-size: 1.2rem; margin: 10px 0; color:#fff;">描述</p>
+             <button onclick="resetGame()" style="padding: 10px 25px; font-size: 1.3rem; font-weight:900; border:3px solid #000; background:var(--pop-cyan); cursor:pointer;">再試一次</button>
         </div>
+        
+        <div class="sound-hint">🎵 請點擊畫面以啟用音效</div>
     </div>
 
     <script>
-        // --- 遊戲參數 ---
+        /* ================= 音效管理器 (Web Audio API) ================= */
+        const SoundManager = {
+            ctx: null,
+            sizzleGain: null,
+            
+            init: function() {
+                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                this.ctx = new AudioContext();
+                
+                // 建立持續的白噪音源 (用於滋滋聲)
+                const bufferSize = 2 * this.ctx.sampleRate;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const output = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+                
+                const whiteNoise = this.ctx.createBufferSource();
+                whiteNoise.buffer = buffer;
+                whiteNoise.loop = true;
+                
+                // 濾波器 (讓聲音聽起來比較像熱氣，而不是雜訊)
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 800;
+                
+                // 音量控制
+                this.sizzleGain = this.ctx.createGain();
+                this.sizzleGain.gain.value = 0; // 預設靜音
+                
+                whiteNoise.connect(filter);
+                filter.connect(this.sizzleGain);
+                this.sizzleGain.connect(this.ctx.destination);
+                whiteNoise.start();
+            },
+
+            resume: function() {
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+
+            setHeatSound: function(intensity) {
+                if (!this.ctx) return;
+                // intensity: 0 ~ 1
+                // 平滑過渡音量
+                const now = this.ctx.currentTime;
+                this.sizzleGain.gain.setTargetAtTime(intensity * 0.3, now, 0.1);
+            },
+
+            playWin: function() {
+                if (!this.ctx) return;
+                this.playTone(523.25, 0, 0.1); // C5
+                this.playTone(659.25, 0.1, 0.1); // E5
+                this.playTone(783.99, 0.2, 0.4); // G5
+            },
+
+            playFail: function() {
+                if (!this.ctx) return;
+                // 鋸齒波低音
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.value = 150;
+                osc.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + 0.5);
+                
+                gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.5);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.6);
+            },
+
+            playTone: function(freq, delay, duration) {
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                
+                gain.gain.setValueAtTime(0, this.ctx.currentTime + delay);
+                gain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + delay + 0.05);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + delay + duration);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(this.ctx.currentTime + delay);
+                osc.stop(this.ctx.currentTime + delay + duration);
+            }
+        };
+
+
+        /* ================= 遊戲邏輯 ================= */
         const config = {
             solderMoveSpeed: 5,
             heatUpRate: 2.0,
@@ -229,18 +305,18 @@
             idealBlobSizeMax: 90
         };
 
-        // --- 遊戲狀態 ---
         let gameState = {
             isPlaying: true,
             isMouseHeld: false,
             ironPos: { x: -100, y: -100 },
-            solderPos: { x: -50, y: 350 }, // 初始位置在左側畫面外
+            solderPos: { x: -50, y: 350 },
             temperature: 25,
             blobSize: 0,
-            keysPressed: {}
+            keysPressed: {},
+            soundInitialized: false
         };
 
-        // --- DOM ---
+        // DOM
         const container = document.getElementById('game-container');
         const iron = document.getElementById('user-iron');
         const ironTip = document.getElementById('iron-tip-point');
@@ -256,8 +332,17 @@
         let padRect = pad.getBoundingClientRect();
         const padRadius = padRect.width / 2;
 
-        // --- 事件監聽 ---
-        // 滑鼠移動 (右手烙鐵)
+        // Init Sound on first click
+        document.body.addEventListener('mousedown', () => {
+            if (!gameState.soundInitialized) {
+                SoundManager.init();
+                gameState.soundInitialized = true;
+                document.querySelector('.sound-hint').style.display = 'none';
+            }
+            SoundManager.resume();
+        });
+
+        // Mouse Move
         container.addEventListener('mousemove', (e) => {
             if (!gameState.isPlaying) return;
             gameState.ironPos.x = e.clientX - containerRect.left;
@@ -265,15 +350,14 @@
             updateIronVisual();
         });
 
-        // 滑鼠按鍵 (加熱)
+        // Mouse Click
         container.addEventListener('mousedown', (e) => { if (e.button === 0) gameState.isMouseHeld = true; });
         window.addEventListener('mouseup', () => { gameState.isMouseHeld = false; });
 
-        // 鍵盤控制 (左手焊錫)
+        // Keyboard
         window.addEventListener('keydown', (e) => { gameState.keysPressed[e.key.toLowerCase()] = true; });
         window.addEventListener('keyup', (e) => { gameState.keysPressed[e.key.toLowerCase()] = false; });
 
-        // --- 遊戲主迴圈 ---
         function gameLoop() {
             if (!gameState.isPlaying) return;
             updateSolderPosition();
@@ -282,14 +366,11 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // 更新烙鐵視覺 (右手)
         function updateIronVisual() {
-            // 偏移量調整，讓筆尖對準游標
             iron.style.left = (gameState.ironPos.x - 11) + 'px'; 
             iron.style.top = (gameState.ironPos.y - 200) + 'px';
         }
 
-        // 更新焊錫位置 (左手鍵盤)
         function updateSolderPosition() {
             const speed = config.solderMoveSpeed;
             if (gameState.keysPressed['w'] || gameState.keysPressed['arrowup']) gameState.solderPos.y -= speed;
@@ -297,7 +378,6 @@
             if (gameState.keysPressed['a'] || gameState.keysPressed['arrowleft']) gameState.solderPos.x -= speed;
             if (gameState.keysPressed['d'] || gameState.keysPressed['arrowright']) gameState.solderPos.x += speed;
 
-            // 限制移動範圍
             gameState.solderPos.x = Math.max(-200, Math.min(containerRect.width - 50, gameState.solderPos.x));
             gameState.solderPos.y = Math.max(0, Math.min(containerRect.height, gameState.solderPos.y));
 
@@ -305,12 +385,9 @@
             solderWire.style.top = gameState.solderPos.y + 'px';
         }
 
-        // 核心互動檢查
         function checkInteractions() {
             const ironTipRect = ironTip.getBoundingClientRect();
             const solderTipRect = solderTip.getBoundingClientRect();
-
-            // 計算與焊盤中心的距離
             const distIronToPad = Math.hypot(ironTipRect.left - (padRect.left + padRadius), ironTipRect.top - (padRect.top + padRadius));
             const distSolderToPad = Math.hypot(solderTipRect.left - (padRect.left + padRadius), solderTipRect.top - (padRect.top + padRadius));
 
@@ -318,7 +395,9 @@
             const isSolderOnPad = distSolderToPad < padRadius;
 
             // 加熱邏輯
+            let isHeating = false;
             if (gameState.isMouseHeld && isIronOnPad) {
+                isHeating = true;
                 gameState.temperature = Math.min(config.maxTemp, gameState.temperature + config.heatUpRate);
                 iron.classList.add('active'); pad.classList.add('heating');
             } else {
@@ -326,16 +405,28 @@
                 iron.classList.remove('active'); pad.classList.remove('heating');
             }
 
-            // 融錫邏輯 (溫度夠且接觸)
+            // 融錫邏輯
+            let isMelting = false;
             if (gameState.temperature > config.meltTempThreshold && isSolderOnPad) {
+                isMelting = true;
                 gameState.blobSize += 0.6;
             }
 
+            // --- 音效控制核心 ---
+            if (gameState.soundInitialized) {
+                if (isHeating) {
+                    // 如果正在融錫，聲音大一點且頻率稍微改變 (透過音量簡單模擬)
+                    SoundManager.setHeatSound(isMelting ? 0.8 : 0.4);
+                } else {
+                    SoundManager.setHeatSound(0);
+                }
+            }
+
             // 失敗判定
-            if (gameState.blobSize > 130) endGame("短路啦！", "焊錫加太多變成史萊姆了！", "#FF0055");
-            if (gameState.temperature >= config.maxTemp) endGame("燒焦了！", "基板過熱碳化！", "#FF0055");
+            if (gameState.blobSize > 130) endGame("短路啦！", "焊錫加太多變成史萊姆了！", "#FF0055", false);
+            if (gameState.temperature >= config.maxTemp) endGame("燒焦了！", "基板過熱碳化！", "#FF0055", false);
             
-            // 勝利結算判定 (有焊錫，且雙手都離開)
+            // 勝利判定 (有焊錫，且雙手都離開)
             if (gameState.blobSize > 20 && (!isIronOnPad || !isSolderOnPad) && !gameState.isMouseHeld && gameState.temperature < 150) {
                  evaluateResult();
             }
@@ -343,12 +434,12 @@
         
         function evaluateResult() {
              if (gameState.blobSize >= config.idealBlobSizeMin && gameState.blobSize <= config.idealBlobSizeMax) {
-                endGame("完美焊接！", "S級！飽滿圓潤的富士山形，職人技藝！", varCSS('--pop-cyan'));
+                endGame("完美焊接！", "S級！飽滿圓潤的富士山形！", varCSS('--pop-cyan'), true);
                  solderBlob.style.background = "radial-gradient(circle at 30% 30%, #fff, #bbb)";
             } else if (gameState.blobSize < config.idealBlobSizeMin) {
-                 endGame("空焊風險", "焊錫量不足，可能接觸不良。", varCSS('--pop-yellow'));
+                 endGame("空焊風險", "焊錫量不足。", varCSS('--pop-yellow'), false);
             } else if (gameState.blobSize > config.idealBlobSizeMax) {
-                 endGame("有點肥...", "雖然會通電，但形狀變成球形了，錫稍多。", varCSS('--pop-yellow'));
+                 endGame("有點肥...", "變成球形了，錫稍多。", varCSS('--pop-yellow'), false);
             }
         }
 
@@ -360,10 +451,17 @@
             solderBlob.style.height = gameState.blobSize + 'px';
         }
 
-        function endGame(title, desc, color) {
+        function endGame(title, desc, color, isWin) {
             if(!gameState.isPlaying) return;
             gameState.isPlaying = false;
             iron.classList.remove('active'); pad.classList.remove('heating');
+            SoundManager.setHeatSound(0); // 停止加熱聲
+
+            // 播放結果音效
+            if(gameState.soundInitialized) {
+                isWin ? SoundManager.playWin() : SoundManager.playFail();
+            }
+
             document.getElementById('result-title').innerText = title;
             document.getElementById('result-title').style.color = color;
             document.getElementById('result-desc').innerText = desc;
@@ -371,15 +469,19 @@
         }
 
         function resetGame() {
-            gameState = {
-                isPlaying: true, isMouseHeld: false,
-                ironPos: { x: -100, y: -100 }, solderPos: { x: -50, y: 350 },
-                temperature: 25, blobSize: 0, keysPressed: {}
-            };
+            gameState.isPlaying = true;
+            gameState.isMouseHeld = false;
+            gameState.ironPos = { x: -100, y: -100 };
+            gameState.solderPos = { x: -50, y: 350 };
+            gameState.temperature = 25;
+            gameState.blobSize = 0;
+            
             solderBlob.style.background = "linear-gradient(135deg, #fff 0%, #aaa 100%)";
             resultOverlay.style.display = "none";
             containerRect = container.getBoundingClientRect();
             padRect = pad.getBoundingClientRect();
+            
+            if(gameState.soundInitialized) SoundManager.setHeatSound(0);
             gameLoop();
         }
         function varCSS(name) { return getComputedStyle(document.documentElement).getPropertyValue(name); }
